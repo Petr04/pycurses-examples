@@ -6,10 +6,12 @@ def center(length, width):
 
 menu_entries = ['hello', 'world', '1qaz2wsx', 'qwertyuiop[]asdfghjkl;zxcvbnm,./']
 menu_title = 'Menu'
+delay = 0.7
 
 def curses_fn(stdscr):
+	stdscr.nodelay(True)
 	stdscr.clear()
-	curses.curs_set(0)
+	curses.curs_set(False)
 	y_max, x_max = stdscr.getmaxyx()
 
 	# Adding a menu window
@@ -40,8 +42,8 @@ def curses_fn(stdscr):
 	keybinds = {curses.KEY_UP: -1, curses.KEY_DOWN: +1}
 	time_printed = None
 	while True:
-		if time_printed: # Add thread
-			if time.time() - time_printed >= 1:
+		if time_printed:
+			if time.time() - time_printed >= delay:
 				stdscr.move(0, 0)
 				stdscr.clrtoeol()
 				stdscr.refresh()
@@ -49,6 +51,9 @@ def curses_fn(stdscr):
 				time_printed = None
 
 		key = stdscr.getch()
+
+		if key == -1:
+			continue
 
 		if key in keybinds:
 			last_entry = cur_entry

@@ -1,18 +1,28 @@
 import curses
+import time
+
+DELAY = 0.5
 
 def curses_fn(stdscr):
-	stdscr.erase()
-	stdscr.addch(0, 0, '*')
+	stdscr.nodelay(True)
+	curses.curs_set(False)
+	stdscr.clear()
 	stdscr.refresh()
 
-	key = stdscr.getch()
-	stdscr.addstr(0, 0, '{} {}'.format(key, chr(key)))
-	if key == curses.KEY_ENTER:
-		stdscr.addstr(1, 0, 'You pushed ENTER')
+	last_time = None
+	while True:
+		ch = stdscr.getch()
 
-	stdscr.refresh()
+		if ch != -1:
+			stdscr.addstr(0, 0, '{} {}\n'.format(ch, str(ch)))
+			stdscr.refresh()
+			last_time = time.time()
 
-	stdscr.getch()
+		if last_time and (time.time() - last_time >= DELAY):
+			stdscr.move(0, 0)
+			stdscr.clrtoeol()
+			stdscr.addstr(0, 0, 'No key pressed\n')
+			stdscr.refresh()
 
 if __name__ == '__main__':
 	curses.wrapper(curses_fn)

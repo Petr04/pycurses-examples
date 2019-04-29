@@ -13,7 +13,7 @@ def curses_fn(stdscr):
 	while True:
 		ch = stdscr.getch()
 
-		if ch != -1:
+		if ch != -1: # Busy wait
 			stdscr.addstr(0, 0, '{} {}\n'.format(ch, str(ch)))
 			stdscr.refresh()
 			last_time = time.time()

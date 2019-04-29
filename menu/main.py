@@ -6,10 +6,11 @@ def center(length, width):
 
 menu_entries = ['hello', 'world', '1qaz2wsx', 'qwertyuiop[]asdfghjkl;zxcvbnm,./']
 menu_title = 'Menu'
-delay = 0.7
+delay = 0.1
 
 def curses_fn(stdscr):
 	stdscr.nodelay(True)
+	stdscr.timeout(1000)
 	stdscr.clear()
 	curses.curs_set(False)
 	y_max, x_max = stdscr.getmaxyx()
@@ -66,6 +67,8 @@ def curses_fn(stdscr):
 				menu.refresh()
 
 		elif key == 10: # Enter
+			stdscr.move(0, 0)
+			stdscr.clrtoeol()
 			stdscr.addstr(0, 0, menu_entries[cur_entry])
 			time_printed = time.time()
 			stdscr.refresh()
